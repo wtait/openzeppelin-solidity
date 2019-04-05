@@ -8,15 +8,15 @@ import "../../lifecycle/Pausable.sol";
  * @dev ERC20 modified with pausable transfers.
  */
 contract ERC20Pausable is ERC20, Pausable {
-    function transfer(address to, uint256 value) public whenNotPaused returns (bool) {
+    function transfer(address to, int256 value) public whenNotPaused returns (bool) {
         return super.transfer(to, value);
     }
 
-    function transferFrom(address from, address to, uint256 value) public whenNotPaused returns (bool) {
+    function transferFrom(address from, address to, int256 value) public whenNotPaused returns (bool) {
         return super.transferFrom(from, to, value);
     }
 
-    function approve(address spender, uint256 value) public whenNotPaused returns (bool) {
+    function approve(address spender, int256 value) public whenNotPaused returns (bool) {
         return super.approve(spender, value);
     }
 

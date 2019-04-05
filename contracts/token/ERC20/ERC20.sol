@@ -16,27 +16,27 @@ import "../../math/SafeMath.sol";
  * compliant implementations may not do it.
  */
 contract ERC20 is IERC20 {
-    using SafeMath for uint256;
+    using SafeMath for int256;
 
-    mapping (address => uint256) private _balances;
+    mapping (address => int256) private _balances;
 
-    mapping (address => mapping (address => uint256)) private _allowed;
+    mapping (address => mapping (address => int256)) private _allowed;
 
-    uint256 private _totalSupply;
+    int256 private _totalSupply;
 
     /**
      * @dev Total number of tokens in existence.
      */
-    function totalSupply() public view returns (uint256) {
+    function totalSupply() public view returns (int256) {
         return _totalSupply;
     }
 
     /**
      * @dev Gets the balance of the specified address.
      * @param owner The address to query the balance of.
-     * @return A uint256 representing the amount owned by the passed address.
+     * @return A int256 representing the amount owned by the passed address.
      */
-    function balanceOf(address owner) public view returns (uint256) {
+    function balanceOf(address owner) public view returns (int256) {
         return _balances[owner];
     }
 
@@ -44,9 +44,9 @@ contract ERC20 is IERC20 {
      * @dev Function to check the amount of tokens that an owner allowed to a spender.
      * @param owner address The address which owns the funds.
      * @param spender address The address which will spend the funds.
-     * @return A uint256 specifying the amount of tokens still available for the spender.
+     * @return A int256 specifying the amount of tokens still available for the spender.
      */
-    function allowance(address owner, address spender) public view returns (uint256) {
+    function allowance(address owner, address spender) public view returns (int256) {
         return _allowed[owner][spender];
     }
 
@@ -55,7 +55,7 @@ contract ERC20 is IERC20 {
      * @param to The address to transfer to.
      * @param value The amount to be transferred.
      */
-    function transfer(address to, uint256 value) public returns (bool) {
+    function transfer(address to, int256 value) public returns (bool) {
         _transfer(msg.sender, to, value);
         return true;
     }
@@ -69,7 +69,7 @@ contract ERC20 is IERC20 {
      * @param spender The address which will spend the funds.
      * @param value The amount of tokens to be spent.
      */
-    function approve(address spender, uint256 value) public returns (bool) {
+    function approve(address spender, int256 value) public returns (bool) {
         _approve(msg.sender, spender, value);
         return true;
     }
@@ -80,9 +80,9 @@ contract ERC20 is IERC20 {
      * and other compliant implementations may not emit the event.
      * @param from address The address which you want to send tokens from
      * @param to address The address which you want to transfer to
-     * @param value uint256 the amount of tokens to be transferred
+     * @param value int256 the amount of tokens to be transferred
      */
-    function transferFrom(address from, address to, uint256 value) public returns (bool) {
+    function transferFrom(address from, address to, int256 value) public returns (bool) {
         _transfer(from, to, value);
         _approve(from, msg.sender, _allowed[from][msg.sender].sub(value));
         return true;
@@ -98,7 +98,7 @@ contract ERC20 is IERC20 {
      * @param spender The address which will spend the funds.
      * @param addedValue The amount of tokens to increase the allowance by.
      */
-    function increaseAllowance(address spender, uint256 addedValue) public returns (bool) {
+    function increaseAllowance(address spender, int256 addedValue) public returns (bool) {
         _approve(msg.sender, spender, _allowed[msg.sender][spender].add(addedValue));
         return true;
     }
@@ -113,7 +113,7 @@ contract ERC20 is IERC20 {
      * @param spender The address which will spend the funds.
      * @param subtractedValue The amount of tokens to decrease the allowance by.
      */
-    function decreaseAllowance(address spender, uint256 subtractedValue) public returns (bool) {
+    function decreaseAllowance(address spender, int256 subtractedValue) public returns (bool) {
         _approve(msg.sender, spender, _allowed[msg.sender][spender].sub(subtractedValue));
         return true;
     }
@@ -124,7 +124,7 @@ contract ERC20 is IERC20 {
      * @param to The address to transfer to.
      * @param value The amount to be transferred.
      */
-    function _transfer(address from, address to, uint256 value) internal {
+    function _transfer(address from, address to, int256 value) internal {
         require(to != address(0));
 
         _balances[from] = _balances[from].sub(value);
@@ -139,7 +139,7 @@ contract ERC20 is IERC20 {
      * @param account The account that will receive the created tokens.
      * @param value The amount that will be created.
      */
-    function _mint(address account, uint256 value) internal {
+    function _mint(address account, int256 value) internal {
         require(account != address(0));
 
         _totalSupply = _totalSupply.add(value);
@@ -153,7 +153,7 @@ contract ERC20 is IERC20 {
      * @param account The account whose tokens will be burnt.
      * @param value The amount that will be burnt.
      */
-    function _burn(address account, uint256 value) internal {
+    function _burn(address account, int256 value) internal {
         require(account != address(0));
 
         _totalSupply = _totalSupply.sub(value);
@@ -167,7 +167,7 @@ contract ERC20 is IERC20 {
      * @param spender The address that will spend the tokens.
      * @param value The number of tokens that can be spent.
      */
-    function _approve(address owner, address spender, uint256 value) internal {
+    function _approve(address owner, address spender, int256 value) internal {
         require(spender != address(0));
         require(owner != address(0));
 
@@ -183,7 +183,7 @@ contract ERC20 is IERC20 {
      * @param account The account whose tokens will be burnt.
      * @param value The amount that will be burnt.
      */
-    function _burnFrom(address account, uint256 value) internal {
+    function _burnFrom(address account, int256 value) internal {
         _burn(account, value);
         _approve(account, msg.sender, _allowed[account][msg.sender].sub(value));
     }

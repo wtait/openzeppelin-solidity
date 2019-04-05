@@ -17,9 +17,9 @@ contract TokenTimelock {
     address private _beneficiary;
 
     // timestamp when token release is enabled
-    uint256 private _releaseTime;
+    int256 private _releaseTime;
 
-    constructor (IERC20 token, address beneficiary, uint256 releaseTime) public {
+    constructor (IERC20 token, address beneficiary, int256 releaseTime) public {
         // solhint-disable-next-line not-rely-on-time
         require(releaseTime > block.timestamp);
         _token = token;
@@ -44,7 +44,7 @@ contract TokenTimelock {
     /**
      * @return the time when the tokens are released.
      */
-    function releaseTime() public view returns (uint256) {
+    function releaseTime() public view returns (int256) {
         return _releaseTime;
     }
 
@@ -55,7 +55,7 @@ contract TokenTimelock {
         // solhint-disable-next-line not-rely-on-time
         require(block.timestamp >= _releaseTime);
 
-        uint256 amount = _token.balanceOf(address(this));
+        int256 amount = _token.balanceOf(address(this));
         require(amount > 0);
 
         _token.safeTransfer(_beneficiary, amount);
